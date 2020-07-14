@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Anuvad</string>
+    <string-array name="fromLang">
+        <item >From</item>
+        <item>English</item>
+    </string-array>
+    <string-array name="toLang">
+        <item>To</item>
+        <item>Hindi</item>
+    </string-array>
+</resources>
