@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1055532234769",
+    "firebase_url": "https://text-to-speech-282917.firebaseio.com",
+    "project_id": "text-to-speech-282917",
+    "storage_bucket": "text-to-speech-282917.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1055532234769:android:45323c94d14a8d752ad9b0",
+        "android_client_info": {
+          "package_name": "com.tts.anuvad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1055532234769-f7uf2aotpcsql41hkinphk5j52vektao.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tts.anuvad",
+            "certificate_hash": "30f611f67e5e45fd1c48abf520c72d8f3cadd8b3"
+          }
+        },
+        {
+          "client_id": "1055532234769-hq6d2igmfa9vrej4544uhli8fje437gd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAKxxh9KpFDH24q2I6eDqKDjhE5d-Y0gQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1055532234769-hq6d2igmfa9vrej4544uhli8fje437gd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -18,17 +18,25 @@ import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.mlkit.nl.languageid.LanguageIdentification;
 import com.google.mlkit.nl.languageid.LanguageIdentifier;
 
+import com.tts.anuvad.models.TTSLanguage;
 import com.tts.anuvad.models.TTSResponse;
 import com.tts.anuvad.models.TranslateResponse;
 import com.tts.anuvad.viewmodels.ViewModelMain;
@@ -37,6 +45,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,24 +57,50 @@ ViewModelMain viewModelMain ;
 
     private ProgressBar progressBar;
     private int REQUEST_CAMERA_PERMISSION_RESULT = 10;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
+    private static String TAG = "MAIN_ACTIVITY";
+    private Spinner spinnerFrom,spinnerTo;
+    private List<String> languages;
+
+    private int langFromPosition;
+    private int langToPosition;
+    private List<TTSLanguage> languageList;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FirebaseApp.initializeApp(this);
+        firebaseAuth = FirebaseAuth.getInstance();
+        signInAnonymously();
         viewModelMain = new ViewModelProvider(this).get(ViewModelMain.class);
         editTextToTranslate = findViewById(R.id.editTextTextMultiLine);
         progressBar = findViewById(R.id.progressBarModel);
         editTextTranslatedText  =findViewById(R.id.editTextTextTranslatedText);
         imageButtonTTS = findViewById(R.id.imageButtonTextToSpeech);
+        spinnerFrom = findViewById(R.id.spinnerFrom);
+        spinnerTo = findViewById(R.id.spinnerTo);
+
+        viewModelMain.getListMutableLiveDataTTSLang().observe(this, new Observer<List<TTSLanguage>>() {
+            @Override
+            public void onChanged(List<TTSLanguage> ttsLanguages) {
+                languages = viewModelMain.getStringLangList(ttsLanguages);
+                languageList = ttsLanguages;
+                ArrayAdapter<String> arrayAdapter  = new ArrayAdapter<String>(getApplicationContext(),R.layout.support_simple_spinner_dropdown_item, languages);
+                spinnerFrom.setAdapter(arrayAdapter);
+                spinnerTo.setAdapter(arrayAdapter);
+            }
+        });
+        viewModelMain.fetchLanguages();
 
 
         viewModelMain.getTranslateResponseMutableLiveData().observe(this, new Observer<TranslateResponse>() {
             @Override
             public void onChanged(TranslateResponse translateResponse) {
                 editTextTranslatedText.setText(translateResponse.getData().getTranslateTextResponseList().get(0).getText());
-                viewModelMain.convertTTS(translateResponse.getData().getTranslateTextResponseList().get(0).getText(),"hi-IN");
+                viewModelMain.convertTTS(translateResponse.getData().getTranslateTextResponseList().get(0).getText(),languageList.get(langToPosition).getBcp());
 
             }
         });
@@ -78,7 +113,7 @@ ViewModelMain viewModelMain ;
                 else{
                     Intent intent=  new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"en_US");
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,languageList.get(langFromPosition).getBcp());
                     startActivityForResult(intent,1);
 
                 }
@@ -104,6 +139,32 @@ ViewModelMain viewModelMain ;
                 }
 
             }
+        });
+        spinnerFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                langFromPosition = position;
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spinnerTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                langToPosition =position;
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+          
         });
         editTextToTranslate.addTextChangedListener(new TextWatcher() {
             @Override
@@ -133,6 +194,22 @@ ViewModelMain viewModelMain ;
 //                        .setApplicationName("Google-TasksAndroidSample/1.0").build();
 
     }
+
+    private void signInAnonymously() {
+        firebaseAuth.signInAnonymously().addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                user = firebaseAuth.getCurrentUser();
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG,"Anonymous_Failed");
+                    }
+                });
+    }
+
     public  void identifyLanguage(){
 
         LanguageIdentifier languageIdentifier = LanguageIdentification.getClient();
@@ -161,7 +238,7 @@ ViewModelMain viewModelMain ;
         if(requestCode==1&&resultCode==RESULT_OK&&data !=null){
             ArrayList<String>s = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             editTextToTranslate.setText(s.get(0));
-            viewModelMain.translate(s.get(0),"hi");
+            viewModelMain.translate(s.get(0),languageList.get(langToPosition).getIso());
 
         }
 

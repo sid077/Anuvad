@@ -14,7 +14,7 @@
         android:orientation="horizontal">
 
         <Spinner
-            android:id="@+id/spinner2"
+            android:id="@+id/spinnerFrom"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:entries="@array/fromLang"
@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/spinnerTo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:entries="@array/toLang"
@@ -43,7 +43,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/cardView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner2" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerFrom" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
@@ -74,7 +74,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cardView"
-            app:layout_constraintTop_toBottomOf="@+id/spinner" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerTo" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
