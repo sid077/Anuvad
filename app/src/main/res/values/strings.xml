@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Anuvad</string>
+    <string name="sts">STS</string>
+    <string name="tts">TTS</string>
+    <string name="stt">STT</string>
+    <string name="translate">Translate</string>
     <string-array name="fromLang">
         <item >From</item>
         <item>English</item>

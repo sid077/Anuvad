@@ -4,23 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.activities.MainActivity">
-
-    <FrameLayout
-        android:id="@+id/frameLayoutMain"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-
-    </FrameLayout>
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
@@ -87,7 +78,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -104,19 +95,19 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
+                app:cardCornerRadius="50dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:cardCornerRadius="50dp">
+                android:layout_gravity="center">
 
                 <ImageButton
                     android:id="@+id/imageButtonTextToSpeech"
+                    app:srcCompat="@drawable/ic_component_3"
                     android:layout_width="75dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:background="@android:color/transparent"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/ic_component_3" />
+                    android:scaleType="centerInside" />
             </androidx.cardview.widget.CardView>
 
             <EditText
@@ -153,12 +144,4 @@
 
         </LinearLayout>
     </ScrollView>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:menu="@menu/bottom_navigation_menu" />
-
-
 </LinearLayout>

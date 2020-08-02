@@ -5,12 +5,13 @@ import com.google.gson.annotations.SerializedName;
 public class TTSLanguage {
     @SerializedName("name")
     String name;
+    @SerializedName("country")
+    String country;
+
     @SerializedName("bcp")
     String bcp;
     @SerializedName("iso")
     String iso;
-    @SerializedName("country")
-    String country;
 
     public String getName() {
         return name;

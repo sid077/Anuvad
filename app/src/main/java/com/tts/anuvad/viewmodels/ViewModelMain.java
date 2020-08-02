@@ -1,5 +1,6 @@
 package com.tts.anuvad.viewmodels;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -7,18 +8,22 @@ import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.tts.anuvad.models.STSTranscript;
 import com.tts.anuvad.models.TTSLanguage;
 import com.tts.anuvad.models.TTSRequest;
 import com.tts.anuvad.models.TTSResponse;
 import com.tts.anuvad.models.TranslateResponse;
 import com.tts.anuvad.repositories.InstanceBuilderTextToSpeech;
 import com.tts.anuvad.repositories.InstanceBuilderTranslate;
+import com.tts.anuvad.repositories.STSTranscriptDB;
 import com.tts.anuvad.repositories.TextToSpeechService;
 import com.tts.anuvad.repositories.TranslateService;
 
@@ -38,7 +43,16 @@ public class ViewModelMain extends ViewModel {
 
 
     MutableLiveData<List<TTSLanguage>> listMutableLiveDataTTSLang = new MutableLiveData<>();
+    private STSTranscriptDB stsTranscriptDB;
+    MutableLiveData<List<STSTranscript>> listMutableLiveDataStsTranscripts = new MutableLiveData<>();
 
+    public MutableLiveData<List<STSTranscript>> getListMutableLiveDataStsTranscripts() {
+        return listMutableLiveDataStsTranscripts;
+    }
+
+    public void setListMutableLiveDataStsTranscripts(MutableLiveData<List<STSTranscript>> listMutableLiveDataStsTranscripts) {
+        this.listMutableLiveDataStsTranscripts = listMutableLiveDataStsTranscripts;
+    }
 
     public void convertTTS(String s, String langCode) {
         TTSRequest request = new TTSRequest();
@@ -144,5 +158,48 @@ public class ViewModelMain extends ViewModel {
         return stringList;
 
 
+    }
+    public STSTranscriptDB getSTSDB(Context context){
+        stsTranscriptDB = Room.databaseBuilder(context,STSTranscriptDB.class,"STS_DB").build();
+        return stsTranscriptDB;
+    }
+
+    public void getSTSTranscripts() {
+        if(stsTranscriptDB!=null){
+            listMutableLiveDataStsTranscripts.postValue( stsTranscriptDB.stsTranscriptDao().getallStSTranscript());
+
+        }
+
+    }
+
+    public void insertSTSTranscript(String textToTranslate, String translatedText,Context context) {
+        if(stsTranscriptDB!=null){
+            STSTranscript stsTranscript = new STSTranscript();
+            stsTranscript.setFrom(textToTranslate);
+            stsTranscript.setTo(translatedText);
+            stsTranscriptDB.stsTranscriptDao().insertSTSTranscript(stsTranscript);
+            stsTranscriptDB.stsTranscriptDao().getallStSTranscript();
+        }
+        else{
+            stsTranscriptDB = getSTSDB(context);
+            STSTranscript stsTranscript = new STSTranscript();
+            stsTranscript.setFrom(textToTranslate);
+            stsTranscript.setTo(translatedText);
+            stsTranscriptDB.stsTranscriptDao().insertSTSTranscript(stsTranscript);
+            stsTranscriptDB.stsTranscriptDao().getallStSTranscript();
+
+        }
+    }
+
+    public void deleteSTS(STSTranscript stsTranscript,Context context) {
+        if(stsTranscriptDB!=null){
+            stsTranscriptDB.stsTranscriptDao().deleteSTSTranscript(stsTranscript);
+            stsTranscriptDB.stsTranscriptDao().getallStSTranscript();
+        }
+        else{
+            stsTranscriptDB = getSTSDB(context);
+            stsTranscriptDB.stsTranscriptDao().deleteSTSTranscript(stsTranscript);
+            stsTranscriptDB.stsTranscriptDao().getallStSTranscript();
+        }
     }
 }
