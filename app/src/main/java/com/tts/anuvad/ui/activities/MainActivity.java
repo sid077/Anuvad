@@ -117,29 +117,6 @@ ViewModelMain viewModelMain ;
             }
         });
         viewModelMain.fetchLanguages();
-
-
-//        viewModelMain.getTranslateResponseMutableLiveData().observe(this, new Observer<TranslateResponse>() {
-//            @Override
-//            public void onChanged(TranslateResponse translateResponse) {
-//
-//                editTextTranslatedText.setText(translateResponse.getData().getTranslateTextResponseList().get(0).getText());
-//                viewModelMain.convertTTS(translateResponse.getData().getTranslateTextResponseList().get(0).getText(),languageList.get(langToPosition).getBcp());
-//
-//            }
-//        });
-//        viewModelMain.getListMutableLiveDataStsTranscripts().observe(this, new Observer<List<STSTranscript>>() {
-//            @Override
-//            public void onChanged(List<STSTranscript> stsTranscripts) {
-//                if(stsTranscripts!=null&&stsTranscripts.size()>0){
-//                    RvStsTranscriptAdapter adapter = new RvStsTranscriptAdapter(stsTranscripts);
-//                    recyclerView.setAdapter(adapter);
-//                    recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(),RecyclerView.HORIZONTAL,false));
-//                }
-//
-//
-//            }
-//        });
         Fragment fragment = new STSFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayoutMain,fragment,"STS").commit();
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -155,95 +132,7 @@ ViewModelMain viewModelMain ;
                 return false;
             }
         });
-//        imageButtonTTS.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(!isRecordPermissionGranted()){
-//                    return;
-//                }
-//                else{
-//                    Intent intent=  new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-//                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-//                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,languageList.get(langFromPosition).getBcp());
-//                    startActivityForResult(intent,1);
-//
-//                }
-//
-//            }
-//        });
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                STSTranscriptDB stsTranscriptDB = viewModelMain.getSTSDB(getApplicationContext());
-//                viewModelMain.getSTSTranscripts();
-//
-//            }
-//        }).start();
-//        viewModelMain.getTtsResponseMutableLiveData().observe(this, new Observer<TTSResponse>() {
-//            @Override
-//            public void onChanged(TTSResponse ttsResponse) {
-//                byte[] bytes = Base64.decode(ttsResponse.getAudio(),Base64.DEFAULT);
-//                mediaPlayer = new MediaPlayer();
-//                try {
-//
-//                    File file = new File(getCacheDir()+"/ttsfile.mp3");
-//                    FileOutputStream fileOutputStream = new FileOutputStream(file);
-//                    fileOutputStream.write(bytes);
-//                    fileOutputStream.close();
-//                    mediaPlayer.setDataSource(getCacheDir()+"/ttsfile.mp3");
-//                    mediaPlayer.prepare();
-//                    mediaPlayer.start();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//        });
-//        spinnerFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                langFromPosition = position;
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-//        spinnerTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                langToPosition =position;
-//
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//
-//        });
-//        editTextToTranslate.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                if(s.length()>0){
-//                    identifyLanguage(s.toString());
-//                    textToTranslate = s.toString();
-//                }
-//            }
-//        });
+
         editTextTranslatedText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -270,14 +159,6 @@ ViewModelMain viewModelMain ;
 
             }
         });
-//       Credential credential =
-//                GoogleAccountCredential.usingOAuth2(this, Collections.singleton(TasksScopes.TASKS));
-//        SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
-//        credential.setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
-//        // Tasks client
-//        service =
-//                new com.google.api.services.tasks.Tasks.Builder(httpTransport, jsonFactory, credential)
-//                        .setApplicationName("Google-TasksAndroidSample/1.0").build();
 
     }
 
@@ -318,18 +199,7 @@ ViewModelMain viewModelMain ;
 
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        Log.d(TAG,"on activity of main act");
-////        if(requestCode==1&&resultCode==RESULT_OK&&data !=null){
-////            ArrayList<String>s = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-////            editTextToTranslate.setText(s.get(0));
-////            viewModelMain.translate(s.get(0),languageList.get(langToPosition).getIso());
-////
-////        }
-//
-//    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

@@ -65,9 +65,7 @@ public class STSFragment extends Fragment {
     private MediaPlayer mediaPlayer;
 
     private ProgressBar progressBar;
-//    private int REQUEST_CAMERA_PERMISSION_RESULT = 10;
-//    private FirebaseAuth firebaseAuth;
-//    private FirebaseUser user;
+
     private static String TAG = "MAIN_ACTIVITY";
     private Spinner spinnerFrom,spinnerTo;
     private List<String> languages;
